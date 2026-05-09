@@ -8,6 +8,10 @@ import com.travlog.travlog.schedule.ScheduleForm;
 import com.travlog.travlog.schedule.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Map;
@@ -32,10 +37,33 @@ public class PlanController {
     private final HistoryService historyService;
 
     @GetMapping
-    public String list(@ModelAttribute("condition") PlanSearchCondition condition, Model model) {
-        model.addAttribute("plans", service.search(condition));
+    public String list(@ModelAttribute("condition") PlanSearchCondition condition,
+                       @PageableDefault(size = 10, sort = "startDate", direction = Sort.Direction.DESC) Pageable pageable,
+                       Model model) {
+        Page<Plan> page = service.search(condition, pageable);
+        model.addAttribute("plans", page.getContent());
+        model.addAttribute("pageNav", PageNav.of(page));
+        model.addAttribute("searchQuery", buildSearchQuery(condition));
         model.addAttribute("statuses", PlanStatusFilter.values());
         return "plan/list";
+    }
+
+    private String buildSearchQuery(PlanSearchCondition condition) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+        if (condition.getKeyword() != null && !condition.getKeyword().isBlank()) {
+            builder.queryParam("keyword", condition.getKeyword());
+        }
+        if (condition.getStartFrom() != null) {
+            builder.queryParam("startFrom", condition.getStartFrom());
+        }
+        if (condition.getStartTo() != null) {
+            builder.queryParam("startTo", condition.getStartTo());
+        }
+        if (condition.getStatus() != null) {
+            builder.queryParam("status", condition.getStatus());
+        }
+        String query = builder.build().getQuery();
+        return query == null ? "" : "&" + query;
     }
 
     @GetMapping("/new")

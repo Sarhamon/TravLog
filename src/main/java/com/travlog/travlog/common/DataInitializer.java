@@ -97,6 +97,19 @@ public class DataInitializer {
                     pastDay3, HistoryStatus.CHANGED, "참소리축음기박물관", LocalTime.of(11, 0), 12_000L, "오죽헌 대신 방문"
             ));
 
+            String[] cities = {"부산", "전주", "여수", "속초", "경주", "안동", "대구", "광주", "춘천", "통영"};
+            for (int i = 0; i < cities.length; i++) {
+                LocalDate start = today.minusDays(60L + i * 10L);
+                planRepository.save(new Plan(
+                        cities[i] + " 짧은 여행",
+                        cities[i],
+                        start,
+                        start.plusDays(1),
+                        150_000L + i * 20_000L,
+                        null
+                ));
+            }
+
             log.info("샘플 데이터 로드 완료 (Plan {}, Schedule {}, History {})",
                     planRepository.count(), scheduleRepository.count(), historyRepository.count());
         };

@@ -1,7 +1,8 @@
 package com.travlog.travlog.plan;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,24 +15,22 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class PlanService {
 
-    private static final Sort SORT_BY_START_DATE_DESC = Sort.by(Sort.Direction.DESC, "startDate");
-
     private final PlanRepository repository;
 
     public List<Plan> findAll() {
         return repository.findAllByOrderByStartDateDesc();
     }
 
-    public List<Plan> search(PlanSearchCondition condition) {
+    public Page<Plan> search(PlanSearchCondition condition, Pageable pageable) {
         if (condition == null || condition.isEmpty()) {
-            return findAll();
+            return repository.findAll(pageable);
         }
         Specification<Plan> spec = Specification.allOf(
                 PlanSpecs.keywordContains(condition.getKeyword()),
                 PlanSpecs.startDateBetween(condition.getStartFrom(), condition.getStartTo()),
                 PlanSpecs.hasStatus(condition.getStatus(), LocalDate.now())
         );
-        return repository.findAll(spec, SORT_BY_START_DATE_DESC);
+        return repository.findAll(spec, pageable);
     }
 
     public Plan findById(Long id) {

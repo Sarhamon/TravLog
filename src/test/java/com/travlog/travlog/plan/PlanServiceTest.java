@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -92,7 +95,7 @@ class PlanServiceTest {
         service.create(new Plan("A", "x", LocalDate.of(2026, 1, 1), LocalDate.of(2026, 1, 2), null, null));
         service.create(new Plan("B", "y", LocalDate.of(2026, 2, 1), LocalDate.of(2026, 2, 2), null, null));
 
-        assertThat(service.search(new PlanSearchCondition()))
+        assertThat(service.search(new PlanSearchCondition(), defaultPageable()).getContent())
                 .extracting(Plan::getTitle).containsExactly("B", "A");
     }
 
@@ -105,7 +108,7 @@ class PlanServiceTest {
         PlanSearchCondition condition = new PlanSearchCondition();
         condition.setKeyword("tokyo");
 
-        assertThat(service.search(condition))
+        assertThat(service.search(condition, defaultPageable()).getContent())
                 .extracting(Plan::getTitle).containsExactly("도쿄여행");
     }
 
@@ -119,7 +122,30 @@ class PlanServiceTest {
         condition.setStartFrom(LocalDate.of(2026, 2, 1));
         condition.setStartTo(LocalDate.of(2026, 4, 30));
 
-        assertThat(service.search(condition))
+        assertThat(service.search(condition, defaultPageable()).getContent())
                 .extracting(Plan::getTitle).containsExactly("3월");
+    }
+
+    @Test
+    void search_paginates_results() {
+        for (int i = 1; i <= 12; i++) {
+            service.create(new Plan("P" + i, "x",
+                    LocalDate.of(2026, 1, i), LocalDate.of(2026, 1, i),
+                    null, null));
+        }
+
+        var firstPage = service.search(new PlanSearchCondition(), PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "startDate")));
+        assertThat(firstPage.getTotalElements()).isEqualTo(12);
+        assertThat(firstPage.getTotalPages()).isEqualTo(3);
+        assertThat(firstPage.getContent()).hasSize(5);
+        assertThat(firstPage.getContent().get(0).getTitle()).isEqualTo("P12");
+
+        var lastPage = service.search(new PlanSearchCondition(), PageRequest.of(2, 5, Sort.by(Sort.Direction.DESC, "startDate")));
+        assertThat(lastPage.getContent()).hasSize(2);
+        assertThat(lastPage.getContent().get(1).getTitle()).isEqualTo("P1");
+    }
+
+    private static Pageable defaultPageable() {
+        return PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "startDate"));
     }
 }
