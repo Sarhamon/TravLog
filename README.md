@@ -1,5 +1,7 @@
 # TravLog
 
+[![test](https://github.com/Sarhamon/TravLog/actions/workflows/test.yml/badge.svg)](https://github.com/Sarhamon/TravLog/actions/workflows/test.yml)
+
 여행의 **계획 → 일정 → 이력**을 단계별로 기록하는 Spring Boot 학습 프로젝트입니다. 가기 전에 큰 그림(계획)을 그리고, 구체적인 일자/장소(일정)를 채우고, 다녀온 뒤 실제 결과(이력)를 남깁니다.
 
 ## 도메인 모델
@@ -105,3 +107,7 @@ src/main/resources/
 ## 비고
 
 학습용 프로젝트로, 인증/사용자 관리는 의도적으로 포함하지 않았습니다.
+
+## 라이선스
+
+[MIT](LICENSE)
