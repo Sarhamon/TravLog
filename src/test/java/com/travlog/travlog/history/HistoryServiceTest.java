@@ -33,11 +33,12 @@ class HistoryServiceTest {
     void upsert_inserts_when_no_existing_history() {
         Schedule schedule = newSchedule();
 
-        History inserted = service.upsert(schedule, HistoryStatus.DONE, "기요미즈데라", LocalTime.of(10, 30), "좋았음");
+        History inserted = service.upsert(schedule, HistoryStatus.DONE, "기요미즈데라", LocalTime.of(10, 30), 30_000L, "좋았음");
 
         assertThat(inserted.getId()).isNotNull();
         assertThat(inserted.getStatus()).isEqualTo(HistoryStatus.DONE);
         assertThat(inserted.getReview()).isEqualTo("좋았음");
+        assertThat(inserted.getActualCost()).isEqualTo(30_000L);
 
         Optional<History> found = service.findByScheduleId(schedule.getId());
         assertThat(found).isPresent();
@@ -47,14 +48,15 @@ class HistoryServiceTest {
     @Test
     void upsert_updates_when_existing_history() {
         Schedule schedule = newSchedule();
-        History first = service.upsert(schedule, HistoryStatus.DONE, "원래장소", LocalTime.of(9, 0), "초안");
+        History first = service.upsert(schedule, HistoryStatus.DONE, "원래장소", LocalTime.of(9, 0), 10_000L, "초안");
 
-        History second = service.upsert(schedule, HistoryStatus.CHANGED, "다른장소", LocalTime.of(11, 0), "변경됨");
+        History second = service.upsert(schedule, HistoryStatus.CHANGED, "다른장소", LocalTime.of(11, 0), 25_000L, "변경됨");
 
         assertThat(second.getId()).isEqualTo(first.getId());
         assertThat(second.getStatus()).isEqualTo(HistoryStatus.CHANGED);
         assertThat(second.getActualPlace()).isEqualTo("다른장소");
         assertThat(second.getReview()).isEqualTo("변경됨");
+        assertThat(second.getActualCost()).isEqualTo(25_000L);
     }
 
     private Schedule newSchedule() {
