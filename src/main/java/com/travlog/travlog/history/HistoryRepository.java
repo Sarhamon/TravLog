@@ -15,4 +15,11 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
     List<History> findByPlanId(@Param("planId") Long planId);
 
     long countByStatus(HistoryStatus status);
+
+    @Query("""
+            select h.schedule.plan.id, coalesce(sum(h.actualCost), 0)
+            from History h
+            group by h.schedule.plan.id
+            """)
+    List<Object[]> sumActualCostByPlanId();
 }

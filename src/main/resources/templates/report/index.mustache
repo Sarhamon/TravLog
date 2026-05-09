@@ -1,0 +1,130 @@
+{{> layout/header}}
+
+<h1 class="h3 mb-4">리포트</h1>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">전체 계획</div>
+                <div class="display-6 fw-semibold">{{view.planCount}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">전체 일정</div>
+                <div class="display-6 fw-semibold">{{view.scheduleCount}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">전체 이력</div>
+                <div class="display-6 fw-semibold">{{view.historyCount}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small mb-2">이력 상태 분포</div>
+                <div class="progress" style="height: 18px;">
+                    <div class="progress-bar bg-success" style="width: {{view.donePercent}}%;" title="DONE">{{view.doneCount}}</div>
+                    <div class="progress-bar bg-secondary" style="width: {{view.skippedPercent}}%;" title="SKIPPED">{{view.skippedCount}}</div>
+                    <div class="progress-bar bg-warning text-dark" style="width: {{view.changedPercent}}%;" title="CHANGED">{{view.changedCount}}</div>
+                </div>
+                <div class="d-flex justify-content-between small text-muted mt-1">
+                    <span>DONE {{view.donePercent}}%</span>
+                    <span>SKIPPED {{view.skippedPercent}}%</span>
+                    <span>CHANGED {{view.changedPercent}}%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white"><strong>월별 출발 빈도</strong> <span class="text-muted small">최근 12개월</span></div>
+    <div class="card-body">
+        <table class="table table-sm align-middle m-0">
+            <tbody>
+            {{#view.monthly}}
+            <tr>
+                <td class="text-muted small" style="width: 110px;">{{label}}</td>
+                <td>
+                    <div class="progress" style="height: 14px;">
+                        <div class="progress-bar bg-primary" style="width: {{barWidth}}%;"></div>
+                    </div>
+                </td>
+                <td class="text-end small text-muted" style="width: 60px;">{{count}}</td>
+            </tr>
+            {{/view.monthly}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white"><strong>계획별 예산 vs 실제 지출</strong></div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle m-0">
+            <thead class="table-light">
+            <tr>
+                <th>계획</th>
+                <th>목적지</th>
+                <th class="text-end">예산</th>
+                <th class="text-end">실지출</th>
+                <th style="width: 220px;">달성률</th>
+                <th class="text-end">잔여</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#view.budgets}}
+            <tr>
+                <td><a class="text-decoration-none" href="/plans/{{planId}}">{{title}}</a></td>
+                <td class="text-muted">{{destination}}</td>
+                <td class="text-end">{{#hasBudget}}{{budget}}원{{/hasBudget}}{{^hasBudget}}<span class="text-muted">-</span>{{/hasBudget}}</td>
+                <td class="text-end">{{actualSum}}원</td>
+                <td>
+                    {{#hasBudget}}
+                    <div class="progress" style="height: 14px;">
+                        <div class="progress-bar {{#overBudget}}bg-danger{{/overBudget}}{{^overBudget}}bg-success{{/overBudget}}"
+                             style="width: {{#achievementRate}}{{achievementRate}}{{/achievementRate}}{{^achievementRate}}0{{/achievementRate}}%;"></div>
+                    </div>
+                    <span class="small text-muted">{{achievementRate}}%</span>
+                    {{/hasBudget}}
+                </td>
+                <td class="text-end {{#overBudget}}text-danger{{/overBudget}}">
+                    {{#hasBudget}}{{remaining}}원{{/hasBudget}}{{^hasBudget}}<span class="text-muted">-</span>{{/hasBudget}}
+                </td>
+            </tr>
+            {{/view.budgets}}
+            {{^view.budgets}}
+            <tr>
+                <td colspan="6" class="text-center text-muted py-4">표시할 계획이 없습니다.</td>
+            </tr>
+            {{/view.budgets}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white"><strong>자주 간 목적지</strong> <span class="text-muted small">Top 5</span></div>
+    <ul class="list-group list-group-flush">
+        {{#view.destinations}}
+        <li class="list-group-item d-flex justify-content-between">
+            <span>{{destination}}</span>
+            <span class="badge bg-primary rounded-pill">{{count}}</span>
+        </li>
+        {{/view.destinations}}
+        {{^view.destinations}}
+        <li class="list-group-item text-center text-muted py-4">데이터가 없습니다.</li>
+        {{/view.destinations}}
+    </ul>
+</div>
+
+{{> layout/footer}}
