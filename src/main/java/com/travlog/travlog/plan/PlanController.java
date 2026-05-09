@@ -100,7 +100,8 @@ public class PlanController {
     public String detail(@PathVariable Long id, Model model) {
         Plan plan = service.findById(id);
         List<Schedule> schedules = scheduleService.findByPlanId(id);
-        Map<Long, History> historyByScheduleId = historyService.findByPlanId(id).stream()
+        List<History> histories = historyService.findByPlanId(id);
+        Map<Long, History> historyByScheduleId = histories.stream()
                 .collect(Collectors.toMap(h -> h.getSchedule().getId(), Function.identity()));
         List<ScheduleHistoryView> scheduleViews = schedules.stream()
                 .map(s -> new ScheduleHistoryView(s, historyByScheduleId.get(s.getId())))
@@ -108,6 +109,7 @@ public class PlanController {
 
         model.addAttribute("plan", plan);
         model.addAttribute("scheduleViews", scheduleViews);
+        model.addAttribute("budgetSummary", BudgetSummary.of(plan, histories, schedules.size()));
         if (!model.containsAttribute("scheduleForm")) {
             model.addAttribute("scheduleForm", new ScheduleForm());
         }

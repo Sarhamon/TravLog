@@ -21,6 +21,28 @@
 
 {{#plan.memo}}<div class="alert alert-light border">{{plan.memo}}</div>{{/plan.memo}}
 
+{{#budgetSummary.hasBudget}}
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h2 class="h6 text-muted mb-3">예산 요약</h2>
+        <div class="row text-center">
+            <div class="col-4">
+                <div class="text-muted small">예산</div>
+                <div class="h5 mb-0">{{budgetSummary.budget}}원</div>
+            </div>
+            <div class="col-4">
+                <div class="text-muted small">실지출 ({{budgetSummary.actualCount}}건)</div>
+                <div class="h5 mb-0">{{budgetSummary.actualSum}}원</div>
+            </div>
+            <div class="col-4">
+                <div class="text-muted small">{{#budgetSummary.overBudget}}초과{{/budgetSummary.overBudget}}{{^budgetSummary.overBudget}}잔여{{/budgetSummary.overBudget}}</div>
+                <div class="h5 mb-0 {{#budgetSummary.overBudget}}text-danger{{/budgetSummary.overBudget}}{{^budgetSummary.overBudget}}text-success{{/budgetSummary.overBudget}}">{{budgetSummary.remaining}}원</div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/budgetSummary.hasBudget}}
+
 <h2 class="h5 mt-4 mb-2">일정</h2>
 <div class="card shadow-sm mb-4">
     <div class="table-responsive">
@@ -45,6 +67,7 @@
                 <td>
                     {{#history}}
                     <span class="badge bg-secondary">{{history.status}}</span>
+                    {{#history.actualCost}}<span class="ms-1 small text-muted">{{history.actualCost}}원</span>{{/history.actualCost}}
                     <a href="/plans/{{plan.id}}/schedules/{{schedule.id}}/history" class="ms-1 small">수정</a>
                     {{/history}}
                     {{^history}}

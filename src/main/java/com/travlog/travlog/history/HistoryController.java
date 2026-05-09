@@ -45,7 +45,7 @@ public class HistoryController {
             model.addAttribute("errors", FormErrors.of(bindingResult));
             return "history/form";
         }
-        historyService.upsert(schedule, form.getStatus(), form.getActualPlace(), form.getActualTime(), form.getReview());
+        historyService.upsert(schedule, form.getStatus(), form.getActualPlace(), form.getActualTime(), form.getActualCost(), form.getReview());
         return "redirect:/plans/" + planId;
     }
 }

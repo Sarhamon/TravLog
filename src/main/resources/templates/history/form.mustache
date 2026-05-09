@@ -21,15 +21,20 @@
                 {{#errors.status}}<div class="invalid-feedback">{{errors.status}}</div>{{/errors.status}}
             </div>
             <div class="row">
-                <div class="col-md-8 mb-3">
+                <div class="col-md-6 mb-3">
                     <label class="form-label">실제 장소 (변경된 경우)</label>
                     <input class="form-control {{#errors.actualPlace}}is-invalid{{/errors.actualPlace}}" name="actualPlace" value="{{#form.actualPlace}}{{form.actualPlace}}{{/form.actualPlace}}">
                     {{#errors.actualPlace}}<div class="invalid-feedback">{{errors.actualPlace}}</div>{{/errors.actualPlace}}
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <label class="form-label">실제 시간 (선택)</label>
                     <input type="time" class="form-control {{#errors.actualTime}}is-invalid{{/errors.actualTime}}" name="actualTime" value="{{#form.actualTime}}{{form.actualTime}}{{/form.actualTime}}">
                     {{#errors.actualTime}}<div class="invalid-feedback">{{errors.actualTime}}</div>{{/errors.actualTime}}
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">실지출 (원)</label>
+                    <input type="number" min="0" step="1000" class="form-control {{#errors.actualCost}}is-invalid{{/errors.actualCost}}" name="actualCost" value="{{#form.actualCost}}{{form.actualCost}}{{/form.actualCost}}" placeholder="선택">
+                    {{#errors.actualCost}}<div class="invalid-feedback">{{errors.actualCost}}</div>{{/errors.actualCost}}
                 </div>
             </div>
             <div class="mb-3">

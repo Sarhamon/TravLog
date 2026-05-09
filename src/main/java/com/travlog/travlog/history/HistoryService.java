@@ -25,12 +25,12 @@ public class HistoryService {
     }
 
     @Transactional
-    public History upsert(Schedule schedule, HistoryStatus status, String actualPlace, LocalTime actualTime, String review) {
+    public History upsert(Schedule schedule, HistoryStatus status, String actualPlace, LocalTime actualTime, Long actualCost, String review) {
         return repository.findByScheduleId(schedule.getId())
                 .map(existing -> {
-                    existing.update(status, actualPlace, actualTime, review);
+                    existing.update(status, actualPlace, actualTime, actualCost, review);
                     return existing;
                 })
-                .orElseGet(() -> repository.save(new History(schedule, status, actualPlace, actualTime, review)));
+                .orElseGet(() -> repository.save(new History(schedule, status, actualPlace, actualTime, actualCost, review)));
     }
 }

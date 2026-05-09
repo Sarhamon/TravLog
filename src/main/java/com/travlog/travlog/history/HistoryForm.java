@@ -1,6 +1,7 @@
 package com.travlog.travlog.history;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,9 @@ public class HistoryForm {
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime actualTime;
 
+    @PositiveOrZero(message = "실지출은 0원 이상이어야 합니다")
+    private Long actualCost;
+
     @Size(max = 1000, message = "후기는 1000자 이하로 입력해 주세요")
     private String review;
 
@@ -30,6 +34,7 @@ public class HistoryForm {
             form.status = history.getStatus();
             form.actualPlace = history.getActualPlace();
             form.actualTime = history.getActualTime();
+            form.actualCost = history.getActualCost();
             form.review = history.getReview();
         }
         return form;

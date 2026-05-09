@@ -45,21 +45,25 @@ public class History extends BaseEntity {
 
     private LocalTime actualTime;
 
+    private Long actualCost;
+
     @Column(length = 500)
     private String review;
 
-    public History(Schedule schedule, HistoryStatus status, String actualPlace, LocalTime actualTime, String review) {
+    public History(Schedule schedule, HistoryStatus status, String actualPlace, LocalTime actualTime, Long actualCost, String review) {
         this.schedule = schedule;
         this.status = status;
         this.actualPlace = actualPlace;
         this.actualTime = actualTime;
+        this.actualCost = actualCost;
         this.review = review;
     }
 
-    public void update(HistoryStatus status, String actualPlace, LocalTime actualTime, String review) {
+    public void update(HistoryStatus status, String actualPlace, LocalTime actualTime, Long actualCost, String review) {
         this.status = status;
         this.actualPlace = actualPlace;
         this.actualTime = actualTime;
+        this.actualCost = actualCost;
         this.review = review;
     }
 }
