@@ -1,0 +1,48 @@
+{{> layout/header}}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h3 mb-2">이력 기록</h1>
+        <div class="text-muted mb-3">
+            <strong>{{schedule.date}}{{#schedule.startTime}} {{schedule.startTime}}{{/schedule.startTime}}</strong>
+            — {{schedule.place}}
+        </div>
+
+        {{#errors.global}}<div class="alert alert-danger">{{errors.global}}</div>{{/errors.global}}
+
+        <form method="post" action="/plans/{{planId}}/schedules/{{schedule.id}}/history" class="card card-body shadow-sm">
+            <div class="mb-3">
+                <label class="form-label">상태</label>
+                <select class="form-select {{#errors.status}}is-invalid{{/errors.status}}" name="status" required>
+                    <option value="DONE" {{#form.done}}selected{{/form.done}}>DONE (예정대로 다녀옴)</option>
+                    <option value="SKIPPED" {{#form.skipped}}selected{{/form.skipped}}>SKIPPED (안 감)</option>
+                    <option value="CHANGED" {{#form.changed}}selected{{/form.changed}}>CHANGED (다른 곳/시간으로 변경)</option>
+                </select>
+                {{#errors.status}}<div class="invalid-feedback">{{errors.status}}</div>{{/errors.status}}
+            </div>
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                    <label class="form-label">실제 장소 (변경된 경우)</label>
+                    <input class="form-control {{#errors.actualPlace}}is-invalid{{/errors.actualPlace}}" name="actualPlace" value="{{#form.actualPlace}}{{form.actualPlace}}{{/form.actualPlace}}">
+                    {{#errors.actualPlace}}<div class="invalid-feedback">{{errors.actualPlace}}</div>{{/errors.actualPlace}}
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">실제 시간 (선택)</label>
+                    <input type="time" class="form-control {{#errors.actualTime}}is-invalid{{/errors.actualTime}}" name="actualTime" value="{{#form.actualTime}}{{form.actualTime}}{{/form.actualTime}}">
+                    {{#errors.actualTime}}<div class="invalid-feedback">{{errors.actualTime}}</div>{{/errors.actualTime}}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">후기</label>
+                <textarea class="form-control {{#errors.review}}is-invalid{{/errors.review}}" name="review" rows="4">{{#form.review}}{{form.review}}{{/form.review}}</textarea>
+                {{#errors.review}}<div class="invalid-feedback">{{errors.review}}</div>{{/errors.review}}
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">저장</button>
+                <a class="btn btn-outline-secondary" href="/plans/{{planId}}">취소</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{> layout/footer}}

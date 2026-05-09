@@ -1,0 +1,93 @@
+{{> layout/header}}
+
+<h1 class="h3 mb-4">대시보드</h1>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">계획</div>
+                <div class="display-6 fw-semibold">{{view.planCount}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">일정</div>
+                <div class="display-6 fw-semibold">{{view.scheduleCount}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">이력</div>
+                <div class="display-6 fw-semibold">{{view.historyCount}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">상태별 (DONE / SKIPPED / CHANGED)</div>
+                <div class="fs-5 fw-semibold">
+                    <span class="text-success">{{view.doneCount}}</span> /
+                    <span class="text-secondary">{{view.skippedCount}}</span> /
+                    <span class="text-warning">{{view.changedCount}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#view.ongoing}}
+<div class="alert alert-info">
+    <strong>진행중</strong>
+    <a href="/plans/{{id}}" class="alert-link ms-2">{{title}}</a>
+    <span class="text-muted ms-2">{{startDate}} ~ {{endDate}} · {{destination}}</span>
+</div>
+{{/view.ongoing}}
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white"><strong>다가올 여행</strong></div>
+            <ul class="list-group list-group-flush">
+                {{#view.upcoming}}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <a href="/plans/{{id}}" class="text-decoration-none">{{title}}</a>
+                        <span class="text-muted small">{{startDate}}</span>
+                    </div>
+                    <div class="text-muted small">{{destination}}</div>
+                </li>
+                {{/view.upcoming}}
+                {{^view.upcoming}}
+                <li class="list-group-item text-center text-muted py-4">예정된 여행이 없습니다.</li>
+                {{/view.upcoming}}
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white"><strong>다녀온 여행</strong></div>
+            <ul class="list-group list-group-flush">
+                {{#view.past}}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <a href="/plans/{{id}}" class="text-decoration-none">{{title}}</a>
+                        <span class="text-muted small">{{endDate}}</span>
+                    </div>
+                    <div class="text-muted small">{{destination}}</div>
+                </li>
+                {{/view.past}}
+                {{^view.past}}
+                <li class="list-group-item text-center text-muted py-4">완료된 여행이 없습니다.</li>
+                {{/view.past}}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{{> layout/footer}}

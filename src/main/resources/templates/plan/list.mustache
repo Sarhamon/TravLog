@@ -1,0 +1,72 @@
+{{> layout/header}}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 m-0">여행 계획</h1>
+    <a class="btn btn-primary" href="/plans/new">+ 새 계획</a>
+</div>
+
+<form method="get" action="/plans" class="card card-body shadow-sm mb-3">
+    <div class="row g-2">
+        <div class="col-md-4">
+            <label class="form-label small text-muted mb-1">검색어 (제목/목적지)</label>
+            <input type="text" class="form-control" name="keyword" value="{{condition.keyword}}" placeholder="예: 도쿄">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small text-muted mb-1">출발일 ≥</label>
+            <input type="date" class="form-control" name="startFrom" value="{{condition.startFrom}}">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small text-muted mb-1">출발일 ≤</label>
+            <input type="date" class="form-control" name="startTo" value="{{condition.startTo}}">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small text-muted mb-1">상태</label>
+            <select class="form-select" name="status">
+                <option value="">전체</option>
+                <option value="ONGOING" {{#condition.ongoing}}selected{{/condition.ongoing}}>진행중</option>
+                <option value="UPCOMING" {{#condition.upcoming}}selected{{/condition.upcoming}}>다가올</option>
+                <option value="PAST" {{#condition.past}}selected{{/condition.past}}>다녀온</option>
+            </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-outline-primary flex-fill">검색</button>
+            <a href="/plans" class="btn btn-outline-secondary">초기화</a>
+        </div>
+    </div>
+</form>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle m-0">
+            <thead class="table-light">
+            <tr>
+                <th style="width: 60px">ID</th>
+                <th>제목</th>
+                <th>목적지</th>
+                <th>출발일</th>
+                <th>도착일</th>
+                <th class="text-end">예산</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#plans}}
+            <tr>
+                <td class="text-muted">{{id}}</td>
+                <td><a class="text-decoration-none" href="/plans/{{id}}">{{title}}</a></td>
+                <td>{{destination}}</td>
+                <td>{{startDate}}</td>
+                <td>{{endDate}}</td>
+                <td class="text-end">{{#budget}}{{budget}}원{{/budget}}</td>
+            </tr>
+            {{/plans}}
+            {{^plans}}
+            <tr>
+                <td colspan="6" class="text-center text-muted py-4">조건에 맞는 계획이 없습니다.</td>
+            </tr>
+            {{/plans}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{> layout/footer}}

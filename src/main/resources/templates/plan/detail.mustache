@@ -1,0 +1,102 @@
+{{> layout/header}}
+
+<p><a href="/plans" class="text-muted text-decoration-none">← 목록으로</a></p>
+
+<div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+    <div>
+        <h1 class="h3 mb-2">{{plan.title}}</h1>
+        <div class="text-muted">
+            <span class="me-3"><strong>목적지</strong> {{plan.destination}}</span>
+            <span class="me-3"><strong>기간</strong> {{plan.startDate}} ~ {{plan.endDate}}</span>
+            {{#plan.budget}}<span><strong>예산</strong> {{plan.budget}}원</span>{{/plan.budget}}
+        </div>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary btn-sm" href="/plans/{{plan.id}}/edit">수정</a>
+        <form method="post" action="/plans/{{plan.id}}/delete" onsubmit="return confirm('정말 삭제할까요? 일정·이력도 함께 삭제됩니다.')">
+            <button type="submit" class="btn btn-outline-danger btn-sm">삭제</button>
+        </form>
+    </div>
+</div>
+
+{{#plan.memo}}<div class="alert alert-light border">{{plan.memo}}</div>{{/plan.memo}}
+
+<h2 class="h5 mt-4 mb-2">일정</h2>
+<div class="card shadow-sm mb-4">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle m-0">
+            <thead class="table-light">
+            <tr>
+                <th>날짜</th>
+                <th>시간</th>
+                <th>장소</th>
+                <th>메모</th>
+                <th>이력</th>
+                <th class="text-end">관리</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#scheduleViews}}
+            <tr>
+                <td>{{schedule.date}}</td>
+                <td>{{#schedule.startTime}}{{schedule.startTime}}{{/schedule.startTime}}</td>
+                <td>{{schedule.place}}</td>
+                <td class="text-muted">{{#schedule.note}}{{schedule.note}}{{/schedule.note}}</td>
+                <td>
+                    {{#history}}
+                    <span class="badge bg-secondary">{{history.status}}</span>
+                    <a href="/plans/{{plan.id}}/schedules/{{schedule.id}}/history" class="ms-1 small">수정</a>
+                    {{/history}}
+                    {{^history}}
+                    <a href="/plans/{{plan.id}}/schedules/{{schedule.id}}/history" class="small">기록</a>
+                    {{/history}}
+                </td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-primary" href="/plans/{{plan.id}}/schedules/{{schedule.id}}/edit">수정</a>
+                    <form method="post" action="/plans/{{plan.id}}/schedules/{{schedule.id}}/delete" class="d-inline" onsubmit="return confirm('일정을 삭제할까요? 이력도 함께 삭제됩니다.')">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                    </form>
+                </td>
+            </tr>
+            {{/scheduleViews}}
+            {{^scheduleViews}}
+            <tr>
+                <td colspan="6" class="text-center text-muted py-4">등록된 일정이 없습니다.</td>
+            </tr>
+            {{/scheduleViews}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h3 class="h6 mb-3">일정 추가</h3>
+
+        {{#scheduleErrors.global}}<div class="alert alert-danger py-2">{{scheduleErrors.global}}</div>{{/scheduleErrors.global}}
+
+        <form method="post" action="/plans/{{plan.id}}/schedules">
+            <div class="row g-2">
+                <div class="col-md-3">
+                    <input type="date" class="form-control {{#scheduleErrors.date}}is-invalid{{/scheduleErrors.date}}" name="date" value="{{#scheduleForm.date}}{{scheduleForm.date}}{{/scheduleForm.date}}" required>
+                    {{#scheduleErrors.date}}<div class="invalid-feedback">{{scheduleErrors.date}}</div>{{/scheduleErrors.date}}
+                </div>
+                <div class="col-md-3">
+                    <input type="time" class="form-control {{#scheduleErrors.startTime}}is-invalid{{/scheduleErrors.startTime}}" name="startTime" value="{{#scheduleForm.startTime}}{{scheduleForm.startTime}}{{/scheduleForm.startTime}}" placeholder="시간(선택)">
+                    {{#scheduleErrors.startTime}}<div class="invalid-feedback">{{scheduleErrors.startTime}}</div>{{/scheduleErrors.startTime}}
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control {{#scheduleErrors.place}}is-invalid{{/scheduleErrors.place}}" name="place" value="{{#scheduleForm.place}}{{scheduleForm.place}}{{/scheduleForm.place}}" placeholder="장소" required>
+                    {{#scheduleErrors.place}}<div class="invalid-feedback">{{scheduleErrors.place}}</div>{{/scheduleErrors.place}}
+                </div>
+            </div>
+            <div class="mt-2">
+                <textarea class="form-control {{#scheduleErrors.note}}is-invalid{{/scheduleErrors.note}}" name="note" rows="2" placeholder="메모(선택)">{{#scheduleForm.note}}{{scheduleForm.note}}{{/scheduleForm.note}}</textarea>
+                {{#scheduleErrors.note}}<div class="invalid-feedback">{{scheduleErrors.note}}</div>{{/scheduleErrors.note}}
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">추가</button>
+        </form>
+    </div>
+</div>
+
+{{> layout/footer}}

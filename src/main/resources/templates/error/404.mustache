@@ -1,0 +1,13 @@
+{{> layout/header}}
+
+<div class="text-center py-5">
+    <div class="display-1 fw-bold text-muted">404</div>
+    <h1 class="h4 mt-2 mb-3">요청하신 페이지를 찾을 수 없습니다</h1>
+    {{#message}}<p class="text-muted">{{message}}</p>{{/message}}
+    <div class="mt-4">
+        <a class="btn btn-primary" href="/">대시보드로</a>
+        <a class="btn btn-outline-secondary" href="/plans">계획 목록</a>
+    </div>
+</div>
+
+{{> layout/footer}}

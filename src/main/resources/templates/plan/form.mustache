@@ -1,0 +1,50 @@
+{{> layout/header}}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h3 mb-3">{{heading}}</h1>
+
+        {{#errors.global}}<div class="alert alert-danger">{{errors.global}}</div>{{/errors.global}}
+
+        <form method="post" action="{{action}}" class="card card-body shadow-sm">
+            <div class="mb-3">
+                <label class="form-label">제목</label>
+                <input class="form-control {{#errors.title}}is-invalid{{/errors.title}}" name="title" value="{{form.title}}" required>
+                {{#errors.title}}<div class="invalid-feedback">{{errors.title}}</div>{{/errors.title}}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">목적지</label>
+                <input class="form-control {{#errors.destination}}is-invalid{{/errors.destination}}" name="destination" value="{{form.destination}}" required>
+                {{#errors.destination}}<div class="invalid-feedback">{{errors.destination}}</div>{{/errors.destination}}
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">출발일</label>
+                    <input type="date" class="form-control {{#errors.startDate}}is-invalid{{/errors.startDate}}" name="startDate" value="{{form.startDate}}" required>
+                    {{#errors.startDate}}<div class="invalid-feedback">{{errors.startDate}}</div>{{/errors.startDate}}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">도착일</label>
+                    <input type="date" class="form-control {{#errors.endDate}}is-invalid{{/errors.endDate}}" name="endDate" value="{{form.endDate}}" required>
+                    {{#errors.endDate}}<div class="invalid-feedback">{{errors.endDate}}</div>{{/errors.endDate}}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">예산 (원)</label>
+                <input type="number" class="form-control {{#errors.budget}}is-invalid{{/errors.budget}}" name="budget" value="{{#form.budget}}{{form.budget}}{{/form.budget}}" min="0">
+                {{#errors.budget}}<div class="invalid-feedback">{{errors.budget}}</div>{{/errors.budget}}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">메모</label>
+                <textarea class="form-control {{#errors.memo}}is-invalid{{/errors.memo}}" name="memo" rows="4">{{#form.memo}}{{form.memo}}{{/form.memo}}</textarea>
+                {{#errors.memo}}<div class="invalid-feedback">{{errors.memo}}</div>{{/errors.memo}}
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">저장</button>
+                <a class="btn btn-outline-secondary" href="{{cancelUrl}}">취소</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{> layout/footer}}

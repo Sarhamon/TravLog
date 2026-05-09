@@ -1,0 +1,40 @@
+{{> layout/header}}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="h3 mb-3">일정 수정</h1>
+
+        {{#errors.global}}<div class="alert alert-danger">{{errors.global}}</div>{{/errors.global}}
+
+        <form method="post" action="/plans/{{planId}}/schedules/{{schedule.id}}" class="card card-body shadow-sm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">날짜</label>
+                    <input type="date" class="form-control {{#errors.date}}is-invalid{{/errors.date}}" name="date" value="{{form.date}}" required>
+                    {{#errors.date}}<div class="invalid-feedback">{{errors.date}}</div>{{/errors.date}}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">시간 (선택)</label>
+                    <input type="time" class="form-control {{#errors.startTime}}is-invalid{{/errors.startTime}}" name="startTime" value="{{#form.startTime}}{{form.startTime}}{{/form.startTime}}">
+                    {{#errors.startTime}}<div class="invalid-feedback">{{errors.startTime}}</div>{{/errors.startTime}}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">장소</label>
+                <input class="form-control {{#errors.place}}is-invalid{{/errors.place}}" name="place" value="{{form.place}}" required>
+                {{#errors.place}}<div class="invalid-feedback">{{errors.place}}</div>{{/errors.place}}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">메모</label>
+                <textarea class="form-control {{#errors.note}}is-invalid{{/errors.note}}" name="note" rows="3">{{#form.note}}{{form.note}}{{/form.note}}</textarea>
+                {{#errors.note}}<div class="invalid-feedback">{{errors.note}}</div>{{/errors.note}}
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">저장</button>
+                <a class="btn btn-outline-secondary" href="/plans/{{planId}}">취소</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{> layout/footer}}
