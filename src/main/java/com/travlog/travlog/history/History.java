@@ -1,6 +1,7 @@
 package com.travlog.travlog.history;
 
 import com.travlog.travlog.common.BaseEntity;
+import com.travlog.travlog.common.Money;
 import com.travlog.travlog.schedule.Schedule;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -65,5 +66,9 @@ public class History extends BaseEntity {
         this.actualTime = actualTime;
         this.actualCost = actualCost;
         this.review = review;
+    }
+
+    public String getActualCostFormatted() {
+        return Money.format(actualCost);
     }
 }

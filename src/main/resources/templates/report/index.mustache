@@ -86,8 +86,8 @@
             <tr>
                 <td><a class="text-decoration-none" href="/plans/{{planId}}">{{title}}</a></td>
                 <td class="text-muted">{{destination}}</td>
-                <td class="text-end">{{#hasBudget}}{{budget}}원{{/hasBudget}}{{^hasBudget}}<span class="text-muted">-</span>{{/hasBudget}}</td>
-                <td class="text-end">{{actualSum}}원</td>
+                <td class="text-end">{{#hasBudget}}{{budgetFormatted}}원{{/hasBudget}}{{^hasBudget}}<span class="text-muted">-</span>{{/hasBudget}}</td>
+                <td class="text-end">{{actualSumFormatted}}원</td>
                 <td>
                     {{#hasBudget}}
                     <div class="progress" style="height: 14px;">
@@ -98,7 +98,7 @@
                     {{/hasBudget}}
                 </td>
                 <td class="text-end {{#overBudget}}text-danger{{/overBudget}}">
-                    {{#hasBudget}}{{remaining}}원{{/hasBudget}}{{^hasBudget}}<span class="text-muted">-</span>{{/hasBudget}}
+                    {{#hasBudget}}{{remainingFormatted}}원{{/hasBudget}}{{^hasBudget}}<span class="text-muted">-</span>{{/hasBudget}}
                 </td>
             </tr>
             {{/view.budgets}}

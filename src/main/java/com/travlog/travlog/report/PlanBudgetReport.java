@@ -1,5 +1,7 @@
 package com.travlog.travlog.report;
 
+import com.travlog.travlog.common.Money;
+
 public record PlanBudgetReport(
         Long planId,
         String title,
@@ -16,6 +18,18 @@ public record PlanBudgetReport(
 
     public Long remaining() {
         return budget == null ? null : budget - actualSum;
+    }
+
+    public String budgetFormatted() {
+        return Money.format(budget);
+    }
+
+    public String actualSumFormatted() {
+        return Money.format(actualSum);
+    }
+
+    public String remainingFormatted() {
+        return Money.format(remaining());
     }
 
     public static PlanBudgetReport of(Long planId, String title, String destination, Long budget, long actualSum) {

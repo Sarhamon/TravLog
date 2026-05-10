@@ -1,6 +1,7 @@
 package com.travlog.travlog.plan;
 
 import com.travlog.travlog.common.BaseEntity;
+import com.travlog.travlog.common.Money;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -51,5 +52,9 @@ public class Plan extends BaseEntity {
         this.endDate = endDate;
         this.budget = budget;
         this.memo = memo;
+    }
+
+    public String getBudgetFormatted() {
+        return Money.format(budget);
     }
 }

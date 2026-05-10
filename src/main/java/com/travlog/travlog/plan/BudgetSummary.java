@@ -1,5 +1,6 @@
 package com.travlog.travlog.plan;
 
+import com.travlog.travlog.common.Money;
 import com.travlog.travlog.history.History;
 
 import java.util.List;
@@ -28,5 +29,17 @@ public record BudgetSummary(Long budget, long actualSum, int actualCount, int to
 
     public boolean overBudget() {
         return budget != null && actualSum > budget;
+    }
+
+    public String budgetFormatted() {
+        return Money.format(budget);
+    }
+
+    public String actualSumFormatted() {
+        return Money.format(actualSum);
+    }
+
+    public String remainingFormatted() {
+        return Money.format(remaining());
     }
 }

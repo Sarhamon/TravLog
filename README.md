@@ -59,6 +59,7 @@ SPRING_PROFILES_ACTIVE=prod ./gradlew bootRun
 | http://localhost:8080/plans/new | 새 계획 등록 |
 | http://localhost:8080/plans/{id} | 계획 상세 + 일정 추가/수정/삭제 |
 | http://localhost:8080/plans/{id}/schedules/{scheduleId}/history | 이력 기록 |
+| http://localhost:8080/reports | 리포트 (월별 출발 빈도 / 예산 대비 실지출 / Top 5 목적지) |
 | http://localhost:8080/h2-console | H2 콘솔 (JDBC URL: `jdbc:h2:mem:travlog`) |
 
 ## 주요 기능
@@ -69,6 +70,7 @@ SPRING_PROFILES_ACTIVE=prod ./gradlew bootRun
   - 일정: 날짜가 계획 기간 내
 - **검색/필터** — Spring Data JPA `Specification`으로 동적 조건 조합
 - **대시보드** — 오늘 기준으로 진행중/다가올/다녀온 분류 및 이력 상태 카운트
+- **리포트** — 최근 12개월 월별 출발 빈도, 계획별 예산 대비 실지출(달성률·초과 표시), 자주 간 목적지 Top 5
 - **글로벌 예외 처리** — `@ControllerAdvice`로 도메인 NotFoundException → 친절한 404 페이지
 
 ## 테스트
@@ -89,6 +91,7 @@ src/main/java/com/travlog/travlog/
 ├── plan/                # Plan, PlanForm, PlanSearchCondition, PlanSpecs, ...
 ├── schedule/            # Schedule, ScheduleForm, ScheduleController, ...
 ├── history/             # History, HistoryStatus, HistoryForm, ...
+├── report/              # ReportController, ReportService, ReportView, ...
 └── TravlogApplication.java
 
 src/main/resources/
@@ -99,6 +102,7 @@ src/main/resources/
     ├── plan/            # list, form (생성/수정 공용), detail
     ├── schedule/        # edit
     ├── history/         # form
+    ├── report/          # index
     └── dashboard.mustache
 ```
 
